@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# tis-101
+
+A TIS-100 Emulator made in Typescript and React.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
