@@ -3,19 +3,44 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
-function Square(): JSX.Element {
-    return (
-        <button type="button" className="square">
-            {/* TODO */}
-        </button>
-    )
+type SquareProps = {
+    value: string
+    onClick: React.MouseEventHandler<HTMLButtonElement>
+}
+type SquareState = Record<string, never>
+class Square extends React.PureComponent<SquareProps, SquareState> {
+    render(): JSX.Element {
+        const { value, onClick } = this.props
+        return (
+            <button type="button" className="square" onClick={onClick}>
+                {value}
+            </button>
+        )
+    }
 }
 
-class Board extends React.Component {
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+type BoardProps = Record<string, never>
+type BoardState = {
+    squares: string[]
+}
+class Board extends React.Component<BoardProps, BoardState> {
+    constructor(props: BoardProps) {
+        super(props)
+        this.state = { squares: Array(9).fill(null) }
+        const { squares } = this.state
+        squares[0] = 'x'
+        squares[4] = 'O'
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    handleClick(i: number): void {
+        // eslint-disable-next-line no-console
+        console.log(i)
+    }
+
     renderSquare(i: number): JSX.Element {
-        return <Square />
+        const { squares } = this.state
+        return <Square value={squares[i]} onClick={() => this.handleClick(i)} />
     }
 
     render(): JSX.Element {
