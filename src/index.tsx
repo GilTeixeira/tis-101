@@ -27,15 +27,12 @@ class Board extends React.Component<BoardProps, BoardState> {
     constructor(props: BoardProps) {
         super(props)
         this.state = { squares: Array(9).fill(null) }
-        const { squares } = this.state
-        squares[0] = 'x'
-        squares[4] = 'O'
     }
 
-    // eslint-disable-next-line class-methods-use-this
     handleClick(i: number): void {
-        // eslint-disable-next-line no-console
-        console.log(i)
+        const { squares } = this.state
+        squares[i] = 'x'
+        this.setState({ squares })
     }
 
     renderSquare(i: number): JSX.Element {
@@ -87,6 +84,8 @@ class Game extends React.PureComponent {
 
 // ========================================
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(document.getElementById('root')!)
-root.render(<Game />)
+const rootElement = document.getElementById('root')
+if (rootElement) {
+    const root = createRoot(rootElement)
+    root.render(<Game />)
+}
