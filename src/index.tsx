@@ -1,4 +1,4 @@
-/* eslint max-classes-per-file: 0 */ // --> OFF
+/* eslint max-classes-per-file: 0 */
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -7,32 +7,38 @@ type SquareProps = {
     value: string
     onClick: React.MouseEventHandler<HTMLButtonElement>
 }
-type SquareState = Record<string, never>
-class Square extends React.PureComponent<SquareProps, SquareState> {
-    render(): JSX.Element {
-        const { value, onClick } = this.props
-        return (
-            <button type="button" className="square" onClick={onClick}>
-                {value}
-            </button>
-        )
-    }
+
+function Square(props: SquareProps): JSX.Element {
+    const { value, onClick } = props
+    return (
+        <button type="button" className="square" onClick={onClick}>
+            {value}
+        </button>
+    )
 }
 
 type BoardProps = Record<string, never>
 type BoardState = {
     squares: string[]
+    xIsNext: boolean
 }
 class Board extends React.Component<BoardProps, BoardState> {
     constructor(props: BoardProps) {
         super(props)
-        this.state = { squares: Array(9).fill(null) }
+        this.state = {
+            squares: Array(9).fill(null),
+            xIsNext: true,
+        }
     }
 
     handleClick(i: number): void {
-        const { squares } = this.state
-        squares[i] = 'x'
-        this.setState({ squares })
+        const { squares, xIsNext } = this.state
+        if (squares[i]) return
+        squares[i] = xIsNext ? 'X' : 'O'
+        this.setState({
+            squares,
+            xIsNext: !xIsNext,
+        })
     }
 
     renderSquare(i: number): JSX.Element {
@@ -41,7 +47,8 @@ class Board extends React.Component<BoardProps, BoardState> {
     }
 
     render(): JSX.Element {
-        const status = 'Next player: X'
+        const { xIsNext } = this.state
+        const status = `Next player: ${xIsNext ? 'X' : 'O'}`
 
         return (
             <div>
