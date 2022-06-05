@@ -17,6 +17,30 @@ function Square(props: SquareProps): JSX.Element {
     )
 }
 
+function calculateWinner(squares: string[]): string | null {
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ]
+    for (let i = 0; i < lines.length; i += 1) {
+        const [a, b, c] = lines[i]
+        if (
+            squares[a] &&
+            squares[a] === squares[b] &&
+            squares[a] === squares[c]
+        ) {
+            return squares[a]
+        }
+    }
+    return null
+}
+
 type BoardProps = Record<string, never>
 type BoardState = {
     squares: string[]
@@ -33,7 +57,9 @@ class Board extends React.Component<BoardProps, BoardState> {
 
     handleClick(i: number): void {
         const { squares, xIsNext } = this.state
-        if (squares[i]) return
+        if (calculateWinner(squares) || squares[i]) {
+            return
+        }
         squares[i] = xIsNext ? 'X' : 'O'
         this.setState({
             squares,
@@ -47,8 +73,14 @@ class Board extends React.Component<BoardProps, BoardState> {
     }
 
     render(): JSX.Element {
-        const { xIsNext } = this.state
-        const status = `Next player: ${xIsNext ? 'X' : 'O'}`
+        const { squares, xIsNext } = this.state
+        const winner = calculateWinner(squares)
+        let status: string
+        if (winner) {
+            status = `Winner: ${winner}`
+        } else {
+            status = `Next player: ${xIsNext ? 'X' : 'O'}`
+        }
 
         return (
             <div>
